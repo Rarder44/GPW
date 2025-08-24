@@ -44,11 +44,12 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(50, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(192, 30);
+            this.label1.Size = new System.Drawing.Size(73, 30);
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -60,7 +61,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.led1);
             this.Name = "ProcessGUI";
-            this.Size = new System.Drawing.Size(242, 30);
+            this.Size = new System.Drawing.Size(123, 30);
             this.ResumeLayout(false);
 
         }

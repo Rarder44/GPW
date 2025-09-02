@@ -31,6 +31,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.radioButton_Toast = new System.Windows.Forms.RadioButton();
+            this.radioButton_Msg = new System.Windows.Forms.RadioButton();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -42,7 +46,7 @@
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(12, 49);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(218, 232);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(169, 232);
             this.flowLayoutPanel1.TabIndex = 0;
             this.flowLayoutPanel1.WrapContents = false;
             // 
@@ -52,20 +56,57 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(231, 37);
+            this.label1.Size = new System.Drawing.Size(253, 37);
             this.label1.TabIndex = 1;
             this.label1.Text = "Se il proc inizia con ^ viene interpretato come regex ( altrimenti == )";
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.radioButton_Msg);
+            this.groupBox1.Controls.Add(this.radioButton_Toast);
+            this.groupBox1.Location = new System.Drawing.Point(187, 49);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(71, 70);
+            this.groupBox1.TabIndex = 2;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Options";
+            // 
+            // radioButton_Toast
+            // 
+            this.radioButton_Toast.AutoSize = true;
+            this.radioButton_Toast.Location = new System.Drawing.Point(6, 19);
+            this.radioButton_Toast.Name = "radioButton_Toast";
+            this.radioButton_Toast.Size = new System.Drawing.Size(52, 17);
+            this.radioButton_Toast.TabIndex = 0;
+            this.radioButton_Toast.TabStop = true;
+            this.radioButton_Toast.Text = "Toast";
+            this.radioButton_Toast.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Msg
+            // 
+            this.radioButton_Msg.AutoSize = true;
+            this.radioButton_Msg.Location = new System.Drawing.Point(6, 42);
+            this.radioButton_Msg.Name = "radioButton_Msg";
+            this.radioButton_Msg.Size = new System.Drawing.Size(63, 17);
+            this.radioButton_Msg.TabIndex = 1;
+            this.radioButton_Msg.TabStop = true;
+            this.radioButton_Msg.Text = "MsgBox";
+            this.radioButton_Msg.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(242, 293);
+            this.ClientSize = new System.Drawing.Size(264, 293);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.flowLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "GPW";
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -74,6 +115,9 @@
 
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.RadioButton radioButton_Msg;
+        private System.Windows.Forms.RadioButton radioButton_Toast;
     }
 }
 

@@ -27,11 +27,13 @@ namespace GPW
     public class ProcessStateChangedEventArgs : EventArgs
     {
         public string ProcessNamePattern { get; }
+        public string ProcessNameTrigger { get; }
         public ProcessState State { get; }
 
-        public ProcessStateChangedEventArgs(string processNamePattern, ProcessState state)
+        public ProcessStateChangedEventArgs(string processNamePattern,string processNameTrigger, ProcessState state)
         {
             ProcessNamePattern = processNamePattern;
+            ProcessNameTrigger = processNameTrigger;
             State = state;
         }
     }
@@ -44,6 +46,7 @@ namespace GPW
     {
         public string ProcessPattern { get; }
         public Regex RegexPattern { get; } = null;
+        public string LastProcessNameFound { get; private set; }
 
 
         public ProcessState CurrentState { get; private set; } = ProcessState.NotRunning;
@@ -71,8 +74,9 @@ namespace GPW
         {
             while (!token.IsCancellationRequested)
             {
-                bool isRunning = Process.GetProcesses()
-                               .Any(p =>
+                
+                var processes=Process.GetProcesses()
+                               .FirstOrDefault(p =>
                                {
                                    try
                                    {             
@@ -87,15 +91,17 @@ namespace GPW
                                        return false; // ignora processi non accessibili
                                    }
                                });
+                bool isRunning = processes != null;
+                if( isRunning)
+                    LastProcessNameFound= processes.ProcessName;
 
 
-           
                 var newState = isRunning ? ProcessState.Running : ProcessState.NotRunning;
 
                 if (newState != CurrentState)
                 {
                     CurrentState = newState;
-                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedEventArgs(ProcessPattern, CurrentState));
+                    ProcessStateChanged?.Invoke(this, new ProcessStateChangedEventArgs(ProcessPattern, LastProcessNameFound ?? "", CurrentState));
                 }
 
                 await Task.Delay(_interval, token);

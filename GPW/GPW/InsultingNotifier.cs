@@ -53,7 +53,7 @@ namespace GPW
         "Il processo {0} si è schiantato: neanche un garbage collector vuole ripulire la tua roba.",
         "{0} out of order. Ha deciso che i tuoi bug sono troppi perfino per un debugger.",
         "Il processo {0} ha mollato. Non sopportava la tua IDE(cenza) di usare le IA anche per fare un hello world.",
-        "{0} terminato. Evidentemente non sopportava più i tuoi infiniti Console.WriteLine() da principiante.",
+        "{0} terminato. Evidentemente non sopportava più i tuoi infiniti Console.WriteLine() da nabbo.",
         "Crash di {0}. Difficile restare in vita dopo aver visto i tuoi while(true) senza break.",
         "{0} ha fatto shutdown. Non voleva passare il resto dei suoi cicli CPU a compilare la tua immondizia.",
         "Il processo {0} è morto. Ultime parole: 'non posso lavorare con uno che mette logica nel front-end'.",

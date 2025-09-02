@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Uwp.Notifications;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static GPW.Settings;
 
 namespace GPW
 {
@@ -16,19 +18,33 @@ namespace GPW
         private NotifyIcon trayIcon;
         private ContextMenuStrip trayMenu;
         private bool trayTipShown = false;
-
         private bool allowshowdisplay = false;
+
+
+        RadioButtonGroupManager<Settings.NotificationType> notificationTypeButtons
+            = new RadioButtonGroupManager<Settings.NotificationType>();
 
 
         protected override void SetVisibleCore(bool value)
         {
-            base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);
+            base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);   
         }
 
 
         public Form1()
         {
             InitializeComponent();
+
+            notificationTypeButtons.Add(radioButton_Msg, Settings.NotificationType.MessageBox);
+            notificationTypeButtons.Add(radioButton_Toast, Settings.NotificationType.Toast);
+
+            notificationTypeButtons.SelectionChanged+= (s, e) =>
+            {
+                Settings.Notification = e;
+            };
+
+            notificationTypeButtons.checkRadio(Settings.Notification);
+
 
             // Inizializza la tray icon e il menu
             trayMenu = new ContextMenuStrip();
@@ -54,7 +70,9 @@ namespace GPW
                     ctrl.Width = flowLayoutPanel1.ClientSize.Width - 10;
             };
 
+
             
+
         }
 
         private void OnExit(object sender, EventArgs e)
@@ -73,19 +91,17 @@ namespace GPW
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing)
+            if (e.CloseReason == CloseReason.UserClosing)   //clicco sulla X del form / rclick -> esci
             {
                 e.Cancel = true;
                 this.Hide();
-                if (!trayTipShown)
-                {
-                    trayIcon.ShowBalloonTip(2000, "GPW", "L'applicazione è ancora attiva nella tray bar.", ToolTipIcon.Info);
-                    trayTipShown = true;
-                }
-                return;
             }
-            trayIcon.Visible = false;
-            base.OnFormClosing(e);
+            else
+            {
+                trayIcon.Visible = false;
+                base.OnFormClosing(e);
+            }
+               
         }
 
 
@@ -107,9 +123,25 @@ namespace GPW
                 
                 if (e.State == ProcessState.NotRunning)
                 {
-                    String str = InsultingNotifier.GetRandomMessage(e.ProcessNamePattern);
-                    MessageBox.Show(str, "Process State Changed", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    
+                    String str = InsultingNotifier.GetRandomMessage(e.ProcessNameTrigger);
 
+                    if (Settings.Notification == Settings.NotificationType.Toast)
+                    {
+                        new ToastContentBuilder()
+                            .AddArgument("action", "viewConversation")
+                            .AddText("Process Not Running")
+                            .AddText(str)
+                            .Show(); // Show the toast
+                    }
+                    else if (Settings.Notification == Settings.NotificationType.MessageBox)
+                    {
+                        MessageBox.Show(str, "Process State Changed", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1, MessageBoxOptions.DefaultDesktopOnly);
+                    }
+                    else
+                    {
+                        throw new NotImplementedException("Tipo di notifica non implementato.");
+                    }
 
                 }
             };

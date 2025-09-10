@@ -21,6 +21,22 @@ namespace GPW
 
         public IEnumerable<ProcessListener> GetListeners() => _listeners;
 
+        public void removeListener(ProcessListener listener)
+        {
+            if (_listeners.Contains(listener))
+            {
+                listener.Dispose();
+                _listeners.Remove(listener);
+            }
+        }
+
+        public void ClearListeners()
+        {
+            foreach (var listener in _listeners)
+                listener.Dispose();
+            _listeners.Clear();
+        }
+
         public void Dispose()
         {
             foreach (var listener in _listeners)

@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static GPW.Settings;
@@ -19,6 +22,8 @@ namespace GPW
         private ContextMenuStrip trayMenu;
         private bool trayTipShown = false;
         private bool allowshowdisplay = false;
+
+        private readonly  string configFilePath; 
 
 
         RadioButtonGroupManager<Settings.NotificationType> notificationTypeButtons
@@ -61,19 +66,47 @@ namespace GPW
 
             trayIcon.DoubleClick += TrayIcon_DoubleClick;
 
-            ProcessConfigReader.ReadOrCreate("processes.txt")
-                .ForEach(p => AddProcess(p));
+
+            //creo/leggo il file di configurazione in %appdata%\GPW\processes.txt
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, "GPW");
+            if (!Directory.Exists(appFolder))
+            {
+                Directory.CreateDirectory(appFolder);
+            }
+            configFilePath = Path.Combine(appFolder, "processes.txt");
+
+
 
             flowLayoutPanel1.SizeChanged += (s, e) =>
             {
                 foreach (Control ctrl in flowLayoutPanel1.Controls)
                     ctrl.Width = flowLayoutPanel1.ClientSize.Width - 10;
             };
-
-
-            
-
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //
+        
+            ProcessConfigReader.ReadOrCreate(configFilePath)
+                .ForEach(p => AddProcess(p));
+
+            string directory = Path.GetDirectoryName(configFilePath);
+            string fileName = Path.GetFileName(configFilePath);
+            FileSystemWatcher watcher = new FileSystemWatcher(directory, fileName);
+            watcher.NotifyFilter = NotifyFilters.LastWrite;
+            watcher.Changed += async (object sender1, FileSystemEventArgs e1) =>
+            {
+                await Task.Delay(100);
+                clearProcesses();
+                ProcessConfigReader.ReadOrCreate(configFilePath)
+                .ForEach(p => AddProcess(p));
+            };
+            watcher.EnableRaisingEvents = true;
+        }
+
+
 
         private void OnExit(object sender, EventArgs e)
         {
@@ -104,9 +137,18 @@ namespace GPW
                
         }
 
+        public void clearProcesses()
+        {
+            this.Invoke((MethodInvoker)delegate
+            {
+                flowLayoutPanel1.Controls.Clear();
+            });
 
+            manager.ClearListeners();
+        }
         public void AddProcess(string processPattern)
         {
+            
             var gui = new ProcessGUI
             {
                 ProcessName = processPattern,
@@ -147,7 +189,23 @@ namespace GPW
             };
 
             manager.AddListener(listener);
-            flowLayoutPanel1.Controls.Add(gui);
+
+            this.Invoke((MethodInvoker)delegate
+            {
+                flowLayoutPanel1.Controls.Add(gui);
+            });
+
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = configFilePath,
+                UseShellExecute = true
+            });
+        }
+
+       
     }
 }

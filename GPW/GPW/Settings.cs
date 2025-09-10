@@ -1,11 +1,27 @@
-﻿using System;
-using Microsoft.Win32;
-
+﻿using Microsoft.Win32;
+using System;
+using System.IO;
+using System.Text.Json;
 namespace GPW
 {
     internal static class Settings
     {
-        private const string RegistryPath = @"Software\GPW";
+        public static readonly string appName = "GPW";
+        public static readonly string ProcessesFilePath;
+        public static readonly string SettingsFilePath;
+
+        static Settings()
+        {
+            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string appFolder = Path.Combine(appDataPath, appName);
+            if (!Directory.Exists(appFolder))
+            {
+                Directory.CreateDirectory(appFolder);
+            }
+            ProcessesFilePath = Path.Combine(appFolder, "processes.txt");
+            SettingsFilePath = Path.Combine(appFolder, "settings.txt");
+        }
+
 
         public enum NotificationType
         {
@@ -13,37 +29,79 @@ namespace GPW
             Toast
         }
 
-        // Proprietà generica per NotificationType
+
+
+
+
+
+
+        // Classe interna per rappresentare i settings
+        private class SettingsData
+        {
+            public NotificationType Notification { get; set; } = NotificationType.MessageBox;
+            // Aggiungi qui altre proprietà in futuro
+        }
+
+        // Proprietà Notification che usa il cache
         public static NotificationType Notification
         {
             get
             {
-                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RegistryPath))
-                {
-                    /*
-                     *   string propertyName = MethodBase.GetCurrentMethod().Name.Replace("get_", "");
-                    string value = key?.GetValue(propertyName) as string;
-                    */
-                    string value = key?.GetValue(nameof(Notification)) as string;
-                    if (Enum.TryParse(value, out NotificationType result))
-                        return result;
-                }
-                return NotificationType.MessageBox; // Default
+                if (_cache == null) readAll();
+                return _cache.Notification;
             }
             set
             {
-                using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryPath))
-                {
-                    key.SetValue(nameof(Notification), value.ToString(), RegistryValueKind.String);
-                }
+                if (_cache == null) readAll();
+                _cache.Notification = value;
+                saveAll();
             }
         }
 
-        // Esempio di proprietà generica per future impostazioni
-        // public static string AltraImpostazione
-        // {
-        //     get { ... }
-        //     set { ... }
-        // }
+
+
+
+
+
+
+        private static SettingsData _cache;
+
+        // Legge tutti i settings dal file JSON
+        public static void readAll()
+        {
+            if (!File.Exists(SettingsFilePath))
+            {
+                _cache = new SettingsData();
+                return;
+            }
+            try
+            {
+                var json = File.ReadAllText(SettingsFilePath);
+                _cache = JsonSerializer.Deserialize<SettingsData>(json);
+            }
+            catch
+            {
+                _cache = new SettingsData();
+            }
+        }
+
+        // Salva tutti i settings nel file JSON
+        public static void saveAll()
+        {
+            var json = JsonSerializer.Serialize(_cache ?? new SettingsData());
+            File.WriteAllText(SettingsFilePath, json);
+        }
+
+
+
+
+
+
+
+
+      
+
+
+
     }
 }

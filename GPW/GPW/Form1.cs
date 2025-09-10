@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static GPW.Settings;
 
 namespace GPW
 {
@@ -22,8 +21,6 @@ namespace GPW
         private ContextMenuStrip trayMenu;
         private bool trayTipShown = false;
         private bool allowshowdisplay = false;
-
-        private readonly  string configFilePath; 
 
 
         RadioButtonGroupManager<Settings.NotificationType> notificationTypeButtons
@@ -77,28 +74,21 @@ namespace GPW
 
 
 
-            //creo/leggo il file di configurazione in %appdata%\GPW\processes.txt
-            string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            string appFolder = Path.Combine(appDataPath, "GPW");
-            if (!Directory.Exists(appFolder))
-            {
-                Directory.CreateDirectory(appFolder);
-            }
-            configFilePath = Path.Combine(appFolder, "processes.txt");
 
+            
 
-            ProcessConfigReader.ReadOrCreate(configFilePath)
+            ProcessConfigReader.ReadOrCreate(Settings.ProcessesFilePath)
                .ForEach(p => AddProcess(p));
 
-            string directory = Path.GetDirectoryName(configFilePath);
-            string fileName = Path.GetFileName(configFilePath);
+            string directory = Path.GetDirectoryName(Settings.ProcessesFilePath);
+            string fileName = Path.GetFileName(Settings.ProcessesFilePath);
             FileSystemWatcher watcher = new FileSystemWatcher(directory, fileName);
             watcher.NotifyFilter = NotifyFilters.LastWrite;
             watcher.Changed += async (object sender1, FileSystemEventArgs e1) =>
             {
                 await Task.Delay(100);
                 clearProcesses();
-                ProcessConfigReader.ReadOrCreate(configFilePath)
+                ProcessConfigReader.ReadOrCreate(Settings.ProcessesFilePath)
                 .ForEach(p => AddProcess(p));
             };
             watcher.EnableRaisingEvents = true;
@@ -207,7 +197,7 @@ namespace GPW
         {
             Process.Start(new ProcessStartInfo
             {
-                FileName = configFilePath,
+                FileName = Settings.ProcessesFilePath,
                 UseShellExecute = true
             });
         }

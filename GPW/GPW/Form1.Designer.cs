@@ -32,8 +32,8 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.radioButton_Toast = new System.Windows.Forms.RadioButton();
             this.radioButton_Msg = new System.Windows.Forms.RadioButton();
+            this.radioButton_Toast = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,17 +72,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Options";
             // 
-            // radioButton_Toast
-            // 
-            this.radioButton_Toast.AutoSize = true;
-            this.radioButton_Toast.Location = new System.Drawing.Point(6, 19);
-            this.radioButton_Toast.Name = "radioButton_Toast";
-            this.radioButton_Toast.Size = new System.Drawing.Size(52, 17);
-            this.radioButton_Toast.TabIndex = 0;
-            this.radioButton_Toast.TabStop = true;
-            this.radioButton_Toast.Text = "Toast";
-            this.radioButton_Toast.UseVisualStyleBackColor = true;
-            // 
             // radioButton_Msg
             // 
             this.radioButton_Msg.AutoSize = true;
@@ -93,6 +82,17 @@
             this.radioButton_Msg.TabStop = true;
             this.radioButton_Msg.Text = "MsgBox";
             this.radioButton_Msg.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_Toast
+            // 
+            this.radioButton_Toast.AutoSize = true;
+            this.radioButton_Toast.Location = new System.Drawing.Point(6, 19);
+            this.radioButton_Toast.Name = "radioButton_Toast";
+            this.radioButton_Toast.Size = new System.Drawing.Size(52, 17);
+            this.radioButton_Toast.TabIndex = 0;
+            this.radioButton_Toast.TabStop = true;
+            this.radioButton_Toast.Text = "Toast";
+            this.radioButton_Toast.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

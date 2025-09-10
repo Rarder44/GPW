@@ -50,7 +50,7 @@ namespace GPW
             trayMenu = new ContextMenuStrip();
             trayMenu.Items.Add("Esci",null, OnExit);
             
-
+            
             trayIcon = new NotifyIcon
             {
                 Text = "GPW",

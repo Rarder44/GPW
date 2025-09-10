@@ -51,7 +51,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Logo.ico</ApplicationIcon>
+    <ApplicationIcon>GitReminder.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>F18C8DA1C926FD41F27C88D2474F18DAEB1A50F3</ManifestCertificateThumbprint>
@@ -110,6 +110,11 @@
     <Compile Include="ProcessManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="RadioButtonGroupManager.cs" />
     <Compile Include="Settings.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -122,14 +127,10 @@
       <DependentUpon>ProcessGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <None Include="GPW_TemporaryKey.pfx" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -146,8 +147,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Logo.ico" />
-    <Content Include="Logo.png" />
+    <Content Include="GitReminder.ico" />
+    <Content Include="Logo\GitReminder.ico" />
+    <Content Include="Logo\GitReminder_128.png" />
+    <Content Include="Logo\GitReminder_256.png" />
+    <Content Include="Logo\GitReminder_64.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.7.2">

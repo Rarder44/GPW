@@ -104,8 +104,9 @@ namespace GPW
                     ProcessStateChanged?.Invoke(this, new ProcessStateChangedEventArgs(ProcessPattern, LastProcessNameFound ?? "", CurrentState));
                 }
 
-                await Task.Delay(_interval, token);
+                try { await Task.Delay(_interval, token); } catch (OperationCanceledException) { }
             }
+            Console.WriteLine($"ProcessListener for pattern '{ProcessPattern}' stopped.");
         }
 
         public void Dispose()

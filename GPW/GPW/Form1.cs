@@ -30,6 +30,7 @@ namespace GPW
             = new RadioButtonGroupManager<Settings.NotificationType>();
 
 
+        //evita che venga mostrato il form all'avvio
         protected override void SetVisibleCore(bool value)
         {
             base.SetVisibleCore(allowshowdisplay ? value : allowshowdisplay);   
@@ -67,6 +68,15 @@ namespace GPW
             trayIcon.DoubleClick += TrayIcon_DoubleClick;
 
 
+            flowLayoutPanel1.SizeChanged += (s, e) =>
+            {
+                foreach (Control ctrl in flowLayoutPanel1.Controls)
+                    ctrl.Width = flowLayoutPanel1.ClientSize.Width - 10;
+            };
+
+
+
+
             //creo/leggo il file di configurazione in %appdata%\GPW\processes.txt
             string appDataPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string appFolder = Path.Combine(appDataPath, "GPW");
@@ -77,20 +87,8 @@ namespace GPW
             configFilePath = Path.Combine(appFolder, "processes.txt");
 
 
-
-            flowLayoutPanel1.SizeChanged += (s, e) =>
-            {
-                foreach (Control ctrl in flowLayoutPanel1.Controls)
-                    ctrl.Width = flowLayoutPanel1.ClientSize.Width - 10;
-            };
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            //
-        
             ProcessConfigReader.ReadOrCreate(configFilePath)
-                .ForEach(p => AddProcess(p));
+               .ForEach(p => AddProcess(p));
 
             string directory = Path.GetDirectoryName(configFilePath);
             string fileName = Path.GetFileName(configFilePath);
@@ -104,6 +102,12 @@ namespace GPW
                 .ForEach(p => AddProcess(p));
             };
             watcher.EnableRaisingEvents = true;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+                    
+           
         }
 
 
@@ -139,10 +143,11 @@ namespace GPW
 
         public void clearProcesses()
         {
-            this.Invoke((MethodInvoker)delegate
+            flowLayoutPanel1.InvokeIfRequired(() =>
             {
                 flowLayoutPanel1.Controls.Clear();
             });
+
 
             manager.ClearListeners();
         }
@@ -190,7 +195,8 @@ namespace GPW
 
             manager.AddListener(listener);
 
-            this.Invoke((MethodInvoker)delegate
+
+            flowLayoutPanel1.InvokeIfRequired(() =>
             {
                 flowLayoutPanel1.Controls.Add(gui);
             });
